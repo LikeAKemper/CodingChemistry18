@@ -35,13 +35,14 @@ class dataCollector:
 
     def getHourlyHistoricData(self, location, startDateTime, endDateTime):
         url = "https://ag.us.clearapis.com/v1.1/historical/hourly?app_id={}&app_key={}"\
-            "&start={}&end={}&location={}, {}"
+            "&start={}&end={}&location={}, {}&unitcode=si-std"
         startEpoch = int(startDateTime.timestamp())
         endEpoch = int(endDateTime.timestamp())
         requestUrl = url.format(dataCollector.APP_ID, dataCollector.APP_KEY, startEpoch,
                                 endEpoch, location[0], location[1])
         response = self.session.get(requestUrl)
         jsonFileInput = response.json()
+        print(jsonFileInput)
         # os.chdir('./JsonFiles')
         # f = open(str(location)+'.json', "w")
         # f.write(json.dumps(jsonFileInput[str(location[0])+','+str(location[1])]))
@@ -52,7 +53,6 @@ class dataCollector:
     @staticmethod
     def createPandas(jsonFileInput, location, startDateTime, endDateTime):
         string = str(jsonFileInput[str(location[0])+','+str(location[1])])
-        print(string)
         string = string.replace('hourly_historical:', '')
         #string = string.replace("{'unit': 'F', 'value':", '')
         js = json.dumps(eval(string))
@@ -81,7 +81,7 @@ class dataCollector:
 
         listToDropAlways = {'descriptors', 'valid_time_end', 'valid_time_start', 'wind_gust'}
         listToDropAllButRain = {'air_temp', 'cloud_cover','dew_point', 'ice_acc_period',
-                                'precip_acc_period_raw', 'relative_humidity', 'liquid_acc_period',
+                                'precip_acc_period_raw', 'relative_humidity', 'precip_acc_period',
                                 'short_wave_radiation', 'long_wave_radiation', 'snow_acc_period',
                                 'precip_acc_period_adjusted', 'u_wind_speed', 'v_wind_speed',
                                 'visibility', 'wind_direction', 'wind_speed', 'wind_speed_2m'}
@@ -95,8 +95,9 @@ class dataCollector:
         return pand
 
 
-startTime = pd.to_datetime('2018-11-01 00:00')
-endTime = pd.to_datetime('2018-11-02 00:00')
+startTime = pd.to_datetime('2017-11-01 00:00')
+endTime = pd.to_datetime('2017-11-10 00:00')
 MannheimLocation = [49, 8]
 data = dataCollector()
 response = data.getHourlyHistoricData(MannheimLocation, startTime, endTime)
+print(dataCollector.createPandas(response, MannheimLocation, startTime, endTime))
