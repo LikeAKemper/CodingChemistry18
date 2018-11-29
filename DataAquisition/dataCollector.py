@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 import numpy as np
 import os
-
+import json
 
 class dataCollector:
     """
@@ -41,27 +41,55 @@ class dataCollector:
         requestUrl = url.format(dataCollector.APP_ID, dataCollector.APP_KEY, startEpoch,
                                 endEpoch, location[0], location[1])
         response = self.session.get(requestUrl)
-        os.chdir('./JsonFiles')
         jsonFileInput = response.json()
-        f = open(str(location)+'.json', "w")
-        f.write(str(jsonFileInput))
-        os.chdir('..')
+        # os.chdir('./JsonFiles')
+        # f = open(str(location)+'.json', "w")
+        # f.write(json.dumps(jsonFileInput[str(location[0])+','+str(location[1])]))
+        # os.chdir('..')
+        dataCollector.createPandas(jsonFileInput, location, startDateTime, endDateTime)
         return jsonFileInput
 
-
+    @staticmethod
+    def createPandas(jsonFileInput, location, startDateTime, endDateTime):
+        string = str(jsonFileInput[str(location[0])+','+str(location[1])])
+        print(string)
+        string = string.replace('hourly_historical:', '')
+        #string = string.replace("{'unit': 'F', 'value':", '')
+        js = json.dumps(eval(string))
+        pand = pd.read_json(js, orient='index')
+        pand.air_temp = pand.air_temp.apply(pd.Series).value
+        pand.cloud_cover = pand.cloud_cover.apply(pd.Series).value
+        pand.dew_point = pand.dew_point.apply(pd.Series).value
+        pand.ice_acc_period = pand.ice_acc_period.apply(pd.Series).value
+        pand.precip_acc_period_raw = pand.precip_acc_period_raw.apply(pd.Series).value
+        pand.relative_humidity = pand.relative_humidity.apply(pd.Series).value
+        pand.liquid_acc_period = pand.liquid_acc_period.apply(pd.Series).value
+        pand.short_wave_radiation = pand.short_wave_radiation.apply(pd.Series).value
+        pand.long_wave_radiation = pand.long_wave_radiation.apply(pd.Series).value
+        pand.precip_acc_period = pand.precip_acc_period.apply(pd.Series).value
+        pand.precip_acc_period_adjusted = pand.precip_acc_period_adjusted.apply(pd.Series).value
+        pand.snow_acc_period = pand.snow_acc_period.apply(pd.Series).value
+        pand.u_wind_speed = pand.u_wind_speed.apply(pd.Series).value
+        pand.v_wind_speed = pand.v_wind_speed.apply(pd.Series).value
+        #pand.valid_time_end = pand.valid_time_end.apply(pd.Series).value
+        #pand.valid_time_start = pand.valid_time_start.apply(pd.Series).value
+        pand.visibility = pand.visibility.apply(pd.Series).value
+        pand.wind_direction = pand.wind_direction.apply(pd.Series).value
+        pand.wind_gust = pand.wind_gust.apply(pd.Series).value
+        pand.wind_speed = pand.wind_speed.apply(pd.Series).value
+        pand.wind_speed_2m = pand.wind_speed_2m.apply(pd.Series).value
+        pand = pand.drop(columns={'descriptors', 'valid_time_end', 'valid_time_start',
+                        'wind_gust'})
+        os.chdir('./JsonFiles')
+        f = open(str(location)+'pand.csv', "w")
+        f.write(pand.to_csv())
+        # f.write(pand.to_json(orient='index'))
+        os.chdir('..')
+        return pand
 
 
 startTime = pd.to_datetime('2018-11-01 00:00')
 endTime = pd.to_datetime('2018-11-02 00:00')
-
 MannheimLocation = [49, 8]
-
 data = dataCollector()
-
-for i in range(100):
-    response = data.getHourlyHistoricData(MannheimLocation, startTime, endTime)
-
-# s = requests.Session()
-# s.get('https://httpbin.org/cookies/set/sessioncookie/123456789')
-# r = s.get('https://httpbin.org/cookies').text
-# print(r)
+response = data.getHourlyHistoricData(MannheimLocation, startTime, endTime)
