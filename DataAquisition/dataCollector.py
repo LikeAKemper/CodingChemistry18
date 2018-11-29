@@ -78,12 +78,19 @@ class dataCollector:
         pand.wind_gust = pand.wind_gust.apply(pd.Series).value
         pand.wind_speed = pand.wind_speed.apply(pd.Series).value
         pand.wind_speed_2m = pand.wind_speed_2m.apply(pd.Series).value
-        pand = pand.drop(columns={'descriptors', 'valid_time_end', 'valid_time_start',
-                        'wind_gust'})
+
+        listToDropAlways = {'descriptors', 'valid_time_end', 'valid_time_start', 'wind_gust'}
+        listToDropAllButRain = {'air_temp', 'cloud_cover','dew_point', 'ice_acc_period',
+                                'precip_acc_period_raw', 'relative_humidity', 'liquid_acc_period',
+                                'short_wave_radiation', 'long_wave_radiation', 'snow_acc_period',
+                                'precip_acc_period_adjusted', 'u_wind_speed', 'v_wind_speed',
+                                'visibility', 'wind_direction', 'wind_speed', 'wind_speed_2m'}
+        unionSet = listToDropAlways.union(listToDropAllButRain)
+        pand = pand.drop(columns=unionSet)
         os.chdir('./JsonFiles')
-        f = open(str(location)+'pand.csv', "w")
-        f.write(pand.to_csv())
-        # f.write(pand.to_json(orient='index'))
+        f = open(str(location)+'onlyRain.json', "w")
+        # f.write(pand.to_csv())
+        f.write(pand.to_json(orient='index'))
         os.chdir('..')
         return pand
 
