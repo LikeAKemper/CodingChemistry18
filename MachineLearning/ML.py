@@ -34,7 +34,18 @@ class ML:
             self.pand[feature][missingVals] = 0
         # drop nans
         self.pand = self.pand.dropna()
+        self.plotCorrelation(pand, targetFeature)
         return self.pand
+
+    def plotCorrelation(self, arr, targetFeature):
+        for row, col_arr in enumerate(arr):
+            for col, feature in enumerate(col_arr):
+                axes[row, col].scatter(df2[feature], df2[targetFeature])
+                if col == 0:
+                    axes[row, col].set(xlabel=feature, ylabel=targetFeature)
+                else:
+                    axes[row, col].set(xlabel=feature)
+        plt.show()
 
     def deriveNthDayFeature(self, N, feature):
         # total number of rows
