@@ -40,11 +40,11 @@ class kNN:
         distMatrix = scipy.spatial.distance.cdist(Yold, Ycurrent)
         ikNearest = distMatrix.flatten().argsort()[:self.nNeighbors]
         kNearestPredValues = Yold[ikNearest]
-        weights = distMatrix.flatten()[ikNearest]
-        weights[weights > 0] = 1/weights[weights > 0]
-        weights[weights == 0] = 1
-        weights = np.repeat(np.expand_dims(weights, axis=0), nHours, axis = 0)
-        print(weights)
+        # weights = distMatrix.flatten()[ikNearest]
+        # weights[weights > 0] = 1/weights[weights > 0]
+        # weights[weights == 0] = 1
+        # weights = np.repeat(np.expand_dims(weights, axis=0), nHours, axis = 0)
+        # print(weights)
         # print(weights, kNearestPredValues)
         # prediction = (1/self.nNeighbors)*(weights.T*kNearestPredValues).sum(axis=0)[0:nHours]
         prediction = (1/self.nNeighbors)*(kNearestPredValues.sum(axis=0)[0:nHours])

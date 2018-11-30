@@ -32,6 +32,7 @@ class ML:
             self.pand[feature][missingVals] = 0
         # drop nans
         self.pand = self.pand.dropna()
+        # self.plotCorrelation(targetFeature)
         return self.pand
 
     def deriveNthDayFeature(self, N, feature):
@@ -42,6 +43,17 @@ class ML:
         col_name = "{}_{}".format(feature, N)
         self.pand[col_name] = nth_prior_measurements
         return
+
+    # def plotCorrelation(self, targetFeature):
+    #     axes = self.pand
+    #     for row, col_arr in enumerate(arr):
+    #         for col, feature in enumerate(col_arr):
+    #             axes[row, col].scatter(df2[feature], df2[targetFeature])
+    #             if col == 0:
+    #                 axes[row, col].set(xlabel=feature, ylabel=targetFeature)
+    #             else:
+    #                 axes[row, col].set(xlabel=feature)
+    #     plt.show()
 
     def getPearsonCorrelation(self, targetFeature='liquid_acc_period'):
         print("Remember the following Pearson interpretation:\n0.8 - 1.0: Very Strong\n0.6 - 0." +

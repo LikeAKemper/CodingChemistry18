@@ -1,6 +1,7 @@
 from dataCollector import *
 from ML import *
 from kNN import *
+from ARIMA import *
 import os
 
 def saveDataToJSON(pandasObject, name):
@@ -13,28 +14,28 @@ def saveDataToCSV(pandasObject, name):
     f.write(pandasObject.to_csv())
     os.chdir('..')
 
-startTime = pd.to_datetime('2017-11-08 00:00')
-endTime = pd.to_datetime('2017-11-18 00:00')
+startTime = pd.to_datetime('2017-09-08 00:00')
+endTime = pd.to_datetime('2017-09-18 00:00')
 nHoursPredict = 10
 lag = 11
 nNearestNeighbor = 5
-startingDelay = 70
+startingDelay = 100
 locations = [[49.496548, 8.585716], [49.487793, 8.592454],
              [49.498726, 8.593487], [49.498726, 8.593487]]
 locations = [[49.496548, 8.585716]]
-# dC = dataCollector()
-# for i, loc in enumerate(locations):
-#     response = dC.getHourlyHistoricData(loc, startTime, endTime)
-#     df = dataCollector.createPandas(response, loc, startTime, endTime)
-#     saveDataToJSON(df, "rawAPIdata "+ str(i))
+dC = dataCollector()
+for i, loc in enumerate(locations):
+    response = dC.getHourlyHistoricData(loc, startTime, endTime)
+    df = dataCollector.createPandas(response, loc, startTime, endTime)
+    saveDataToJSON(df, "rawAPIdata "+ str(i))
 
 for i, loc in enumerate(locations):
     dataName = "rawAPIdata "+str(i)+".json"
     NNR = kNN(dataName, lag, nNearestNeighbor, startingDelay)
-    stepsToCalculate = 64
+    stepsToCalculate = 80
     LMSE = NNR.calculateLMSE(nHoursPredict, stepsToCalculate)
     print(LMSE)
-    for hours in range(30):
+    for hours in range(5):
         historicDF = NNR.giveLast24HistoricData()
         saveDataToCSV(historicDF, str(i)+str(hours)+'Historic')
         predDataKNN = NNR.predict(nHoursPredict)
