@@ -43,10 +43,6 @@ class dataCollector:
         response = self.session.get(requestUrl)
         jsonFileInput = response.json()
         print(jsonFileInput)
-        # os.chdir('./JsonFiles')
-        # f = open(str(location)+'.json', "w")
-        # f.write(json.dumps(jsonFileInput[str(location[0])+','+str(location[1])]))
-        # os.chdir('..')
         dataCollector.createPandas(jsonFileInput, location, startDateTime, endDateTime)
         return jsonFileInput
 
@@ -87,17 +83,12 @@ class dataCollector:
                                 'visibility', 'wind_direction', 'wind_speed', 'wind_speed_2m'}
         unionSet = listToDropAlways.union(listToDropAllButRain)
         pand = pand.drop(columns=unionSet)
-        os.chdir('./JsonFiles')
-        f = open(str(location)+'onlyRain.json', "w")
-        # f.write(pand.to_csv())
-        f.write(pand.to_json(orient='index'))
-        os.chdir('..')
         return pand
 
-
-startTime = pd.to_datetime('2017-11-01 00:00')
-endTime = pd.to_datetime('2017-11-10 00:00')
-MannheimLocation = [49, 8]
-data = dataCollector()
-response = data.getHourlyHistoricData(MannheimLocation, startTime, endTime)
-print(dataCollector.createPandas(response, MannheimLocation, startTime, endTime))
+#
+# startTime = pd.to_datetime('2017-11-01 00:00')
+# endTime = pd.to_datetime('2017-11-10 00:00')
+# MannheimLocation = [49, 8]
+# data = dataCollector()
+# response = data.getHourlyHistoricData(MannheimLocation, startTime, endTime)
+# print(dataCollector.createPandas(response, MannheimLocation, startTime, endTime))
