@@ -6,14 +6,12 @@ from dataCollector import *
 class pearsonAnalysis:
 
     def __init__(self):
-        MLobject = ML('PEARSON.json')
-        dfWithLags, corr = MLobject.applyAnalysis(30)
-        print(corr)
+        # MLobject = ML('PEARSON.json')
+        # dfWithLags, corr = MLobject.applyAnalysis(30)
+        # print(corr)
         return
 
-    def loadDataFromAPI(self):
-        startTime = pd.to_datetime('2017-11-30 00:00')
-        endTime = pd.to_datetime('2017-12-10 00:00')
+    def loadDataFromAPI(self, startTime, endTime):
         loc = [49, 8]
         data = dataCollector()
         response = data.getHourlyHistoricData(loc, startTime, endTime)
@@ -36,3 +34,21 @@ class pearsonAnalysis:
         result = pd.concat(frames, keys=frames[0].columns)
         self.saveDataToJSON(result, 'PEARSON.json')
         return result
+
+PA = pearsonAnalysis()
+startTime = [pd.to_datetime('2017-11-01 00:00'), pd.to_datetime('2017-11-10 00:00'),
+             pd.to_datetime('2017-11-19 00:00'), pd.to_datetime('2017-11-28 00:00'),
+             pd.to_datetime('2017-12-03 00:00'), pd.to_datetime('2017-12-12 00:00'),
+             pd.to_datetime('2017-12-21 00:00')]
+endTime = [pd.to_datetime('2017-11-10 00:00'), pd.to_datetime('2017-11-19 00:00'),
+           pd.to_datetime('2017-11-28 00:00'), pd.to_datetime('2017-12-03 00:00'),
+           pd.to_datetime('2017-12-12 00:00'), pd.to_datetime('2017-12-21 00:00'),
+           pd.to_datetime('2017-12-31 00:00'),]
+lag = 30
+for i in range(len(startTime)):
+    PA.loadDataFromAPI(startTime[i], endTime[i])
+result = PA.loadAndCreateNewJson()
+MLobject = ML(result)
+newPD, corr = MLobject.applyAnalysis(lag)
+f = open('pCorr.csv', 'w')
+f.write(corr.to_csv())

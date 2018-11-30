@@ -81,7 +81,7 @@ class dataCollector:
                                 'precip_acc_period_adjusted', 'u_wind_speed', 'v_wind_speed',
                                 'visibility', 'wind_direction', 'wind_speed', 'wind_speed_2m'}
         unionSet = listToDropAlways.union(listToDropAlways)
-        pand = pand.drop(columns=unionSet)
+        pand = pand.drop(columns=listToDropAlways)
         # os.chdir('./JsonFiles')
         # f = open(str(location)+'PEARSON.json', "w")
         # # f.write(pand.to_csv())

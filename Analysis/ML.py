@@ -4,11 +4,8 @@ import pandas as pd
 
 class ML:
 
-    def __init__(self, fileName):
-        f = open(fileName, 'r')
-        stringName = f.read()
-        print(stringName)
-        self.pand = pd.read_json(stringName, orient='index')
+    def __init__(self, pandTS):
+        self.pand = pandTS
         return
 
     def applyAnalysis(self, lag):
