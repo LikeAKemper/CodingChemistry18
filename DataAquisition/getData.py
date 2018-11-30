@@ -35,7 +35,7 @@ for i, loc in enumerate(locations):
     stepsToCalculate = 80
     LMSE = NNR.calculateLMSE(nHoursPredict, stepsToCalculate)
     print(LMSE)
-    for hours in range(5):
+    for hours in range(10):
         historicDF = NNR.giveLast24HistoricData()
         saveDataToCSV(historicDF, str(i)+str(hours)+'Historic')
         predDataKNN = NNR.predict(nHoursPredict)

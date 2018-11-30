@@ -79,9 +79,8 @@ class dataCollector:
         listToDropAllButRain = {'air_temp', 'cloud_cover','dew_point', 'ice_acc_period',
                                 'precip_acc_period_raw', 'relative_humidity', 'precip_acc_period',
                                 'short_wave_radiation', 'long_wave_radiation', 'snow_acc_period',
-                                'u_wind_speed', 'v_wind_speed', 'precip_acc_period_adjusted',
+                                'u_wind_speed', 'v_wind_speed',# 'precip_acc_period_adjusted',
                                 'visibility', 'wind_direction', 'wind_speed', 'wind_speed_2m'}
-                                #
         unionSet = listToDropAlways.union(listToDropAllButRain)
         pand = pand.drop(columns=unionSet)
         return pand
