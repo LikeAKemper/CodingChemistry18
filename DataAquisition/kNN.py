@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 
 class kNN:
 
-    def __init__(self, nameOfDataSet, autoregressiveLag, nNeighbors):
+    def __init__(self, nameOfDataSet, autoregressiveLag, nNeighbors, startingDelay=64):
         self.nNeighbors = nNeighbors
-        self.startingDelay = 24
+        self.startingDelay = startingDelay
         self.lag = autoregressiveLag
         MLobject = ML(nameOfDataSet)
 
@@ -20,7 +20,7 @@ class kNN:
         return
 
     def giveLast24HistoricData(self):
-        fileToSave = self.df.iloc[-24:, 0]
+        fileToSave = self.df.iloc[-self.startingDelay:, 0]
         return fileToSave
 
     def step(self):
@@ -41,9 +41,13 @@ class kNN:
         ikNearest = distMatrix.flatten().argsort()[:self.nNeighbors]
         kNearestPredValues = Yold[ikNearest]
         weights = distMatrix.flatten()[ikNearest]
-        weights[weights>0]=1/weights[weights>0]
+        weights[weights > 0] = 1/weights[weights > 0]
+        weights[weights == 0] = 1
+        weights = np.repeat(np.expand_dims(weights, axis=0), nHours, axis = 0)
         print(weights)
-        prediction = (1/self.nNeighbors)*kNearestPredValues.sum(axis=0)[0:nHours]
+        # print(weights, kNearestPredValues)
+        # prediction = (1/self.nNeighbors)*(weights.T*kNearestPredValues).sum(axis=0)[0:nHours]
+        prediction = (1/self.nNeighbors)*(kNearestPredValues.sum(axis=0)[0:nHours])
         preTime = self.df.index[-1] + pd.timedelta_range(start='1 hours', periods=nHours, freq='h')
         predTS = pd.DataFrame(prediction, index=preTime)
         # self.saveDataToCSV(predTS.iloc[:, :], 'prediction')
@@ -52,13 +56,20 @@ class kNN:
     def plot(self, nHoursPredict, nHoursHistory=24,):
         historicData = self.df.iloc[-nHoursHistory:, 0]
         predictionKNN = self.predict(nHoursPredict)
-        predictionFullInformation = self.fullInformationForecast()
+        predictionFullInformation = self.fullInformationForecast(nHoursPredict)
         a = historicData.plot(style=['b-o'], label='historic data')
         predictionKNN.plot(ax=a, style=['r-.'], label='prediction kNN')
         predictionFullInformation.plot(ax=a, style=['--'], label='truth')
         plt.legend(loc='upper left')
         plt.show()
 
+    def calculateLMSE(self, nHoursPred, stepsToCalculate):
+        LMSE = 0
+        for i in range(stepsToCalculate):
+            truePred = self.fullInformationForecast(nHoursPred).iloc[:].values.flatten()
+            knnPred = self.predict(nHoursPred).iloc[:].values.flatten()
+            LMSE = LMSE + np.sum((truePred-knnPred)**2)
+        return LMSE
 
     def runSimulation(self):
         while self.startingDelay > 0:

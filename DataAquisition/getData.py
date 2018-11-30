@@ -18,6 +18,7 @@ endTime = pd.to_datetime('2017-11-18 00:00')
 nHoursPredict = 10
 lag = 11
 nNearestNeighbor = 5
+startingDelay = 70
 locations = [[49.496548, 8.585716], [49.487793, 8.592454],
              [49.498726, 8.593487], [49.498726, 8.593487]]
 locations = [[49.496548, 8.585716]]
@@ -29,14 +30,16 @@ locations = [[49.496548, 8.585716]]
 
 for i, loc in enumerate(locations):
     dataName = "rawAPIdata "+str(i)+".json"
-    NNR = kNN(dataName, lag, nNearestNeighbor)
-    for hours in range(10):
+    NNR = kNN(dataName, lag, nNearestNeighbor, startingDelay)
+    stepsToCalculate = 64
+    LMSE = NNR.calculateLMSE(nHoursPredict, stepsToCalculate)
+    print(LMSE)
+    for hours in range(30):
         historicDF = NNR.giveLast24HistoricData()
         saveDataToCSV(historicDF, str(i)+str(hours)+'Historic')
         predDataKNN = NNR.predict(nHoursPredict)
         saveDataToCSV(predDataKNN, str(i)+str(hours)+'PredKNN')
         truePred = NNR.fullInformationForecast(nHoursPredict)
         saveDataToCSV(truePred, str(i)+str(hours)+'PredTrue')
-        break
         NNR.plot(nHoursPredict)
         NNR.step()

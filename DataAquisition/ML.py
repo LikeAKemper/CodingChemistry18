@@ -15,9 +15,9 @@ class ML:
         """
         for each day (row) and for a given feature (column) add value for that feature N days
         prior
-        For each value of N (1-3 in our case) a new column is added for that feature representing
+        For each value of N a new column is added for that feature representing
         the Nth prior day's measurement.
-        @pararms:           targetFeature          'precip_acc_period'
+        @pararms:           targetFeature          alt. 'precip_acc_period'
         """
         features = self.pand.columns
         for feature in features:
