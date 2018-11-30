@@ -51,7 +51,7 @@ class kNN:
         predictionFullInformation.plot(ax=a, style=['--'], label='truth')
         plt.legend(loc='upper left')
         plt.show()
-
+        return
 
     def runSimulation(self):
         while self.startingDelay > 0:
@@ -59,10 +59,10 @@ class kNN:
             self.step()
         return
 
-
     def saveDataToCSV(self, pandasObject, name):
         f = open(name+'.csv', 'w')
         f.write(pandasObject.to_csv())
+        return
 
 
 nameOfDataSet = '[49, 8]onlyRain.json'

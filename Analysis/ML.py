@@ -5,12 +5,16 @@ import pandas as pd
 class ML:
 
     def __init__(self, fileName):
-        os.chdir('../DataAquisition/JsonFiles')
         f = open(fileName, 'r')
-        str = f.read()
-        os.chdir('../../MachineLearning')
-        self.pand = pd.read_json(str, orient='index')
+        stringName = f.read()
+        print(stringName)
+        self.pand = pd.read_json(stringName, orient='index')
         return
+
+    def applyAnalysis(self, lag):
+        newPD = self.calculateLaggedInstance(lag)
+        corr = self.getPearsonCorrelation()
+        return newPD, corr
 
     def calculateLaggedInstance(self, lag, targetFeature='liquid_acc_period'):
         # lag = autoregressive lag

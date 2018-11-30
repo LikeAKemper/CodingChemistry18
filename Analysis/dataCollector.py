@@ -42,11 +42,6 @@ class dataCollector:
                                 endEpoch, location[0], location[1])
         response = self.session.get(requestUrl)
         jsonFileInput = response.json()
-        print(jsonFileInput)
-        # os.chdir('./JsonFiles')
-        # f = open(str(location)+'.json', "w")
-        # f.write(json.dumps(jsonFileInput[str(location[0])+','+str(location[1])]))
-        # os.chdir('..')
         dataCollector.createPandas(jsonFileInput, location, startDateTime, endDateTime)
         return jsonFileInput
 
