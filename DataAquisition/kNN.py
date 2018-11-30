@@ -68,7 +68,7 @@ class kNN:
         for i in range(stepsToCalculate):
             truePred = self.fullInformationForecast(nHoursPred).iloc[:].values.flatten()
             knnPred = self.predict(nHoursPred).iloc[:].values.flatten()
-            LMSE = LMSE + np.sum((truePred-knnPred)**2)
+            LMSE = LMSE + (1/len(truePred))*np.sum((truePred-knnPred)**2)
         return LMSE
 
     def runSimulation(self):
@@ -76,7 +76,6 @@ class kNN:
             self.plot()
             self.step()
         return
-
 
     def saveDataToCSV(self, pandasObject, name):
         f = open(name+'.csv', 'w')

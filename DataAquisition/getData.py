@@ -23,17 +23,17 @@ startingDelay = 100
 locations = [[49.496548, 8.585716], [49.487793, 8.592454],
              [49.498726, 8.593487], [49.498726, 8.593487]]
 locations = [[49.496548, 8.585716]]
-dC = dataCollector()
-for i, loc in enumerate(locations):
-    response = dC.getHourlyHistoricData(loc, startTime, endTime)
-    df = dataCollector.createPandas(response, loc, startTime, endTime)
-    saveDataToJSON(df, "rawAPIdata "+ str(i))
+# dC = dataCollector()
+# for i, loc in enumerate(locations):
+#     response = dC.getHourlyHistoricData(loc, startTime, endTime)
+#     df = dataCollector.createPandas(response, loc, startTime, endTime)
+#     saveDataToJSON(df, "rawAPIdata "+ str(i))
 
 for i, loc in enumerate(locations):
     dataName = "rawAPIdata "+str(i)+".json"
     NNR = kNN(dataName, lag, nNearestNeighbor, startingDelay)
     stepsToCalculate = 80
-    LMSE = NNR.calculateLMSE(nHoursPredict, stepsToCalculate)
+    LMSE = (1/stepsToCalculate)*NNR.calculateLMSE(nHoursPredict, stepsToCalculate)
     print(LMSE)
     for hours in range(10):
         historicDF = NNR.giveLast24HistoricData()
