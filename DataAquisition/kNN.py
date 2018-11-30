@@ -39,10 +39,10 @@ class kNN:
         Yold = self.df.iloc[0:-1, 1:len(self.df.columns)-1].values
         distMatrix = scipy.spatial.distance.cdist(Yold, Ycurrent)
         ikNearest = distMatrix.flatten().argsort()[:self.nNeighbors]
-        iPredValues = ikNearest.T + np.arange(1, len(ikNearest) + 1)
-        # set upper limit
-        iPredValues[iPredValues >= len(Yold)] = len(Yold)-1
-        kNearestPredValues = Yold[iPredValues]
+        kNearestPredValues = Yold[ikNearest]
+        weights = distMatrix.flatten()[ikNearest]
+        weights[weights>0]=1/weights[weights>0]
+        print(weights)
         prediction = (1/self.nNeighbors)*kNearestPredValues.sum(axis=0)[0:nHours]
         preTime = self.df.index[-1] + pd.timedelta_range(start='1 hours', periods=nHours, freq='h')
         predTS = pd.DataFrame(prediction, index=preTime)

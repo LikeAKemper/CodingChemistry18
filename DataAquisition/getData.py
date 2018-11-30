@@ -20,12 +20,12 @@ lag = 11
 nNearestNeighbor = 5
 locations = [[49.496548, 8.585716], [49.487793, 8.592454],
              [49.498726, 8.593487], [49.498726, 8.593487]]
-#locations = [[49.496548, 8.585716]]
-dC = dataCollector()
-for i, loc in enumerate(locations):
-    response = dC.getHourlyHistoricData(loc, startTime, endTime)
-    df = dataCollector.createPandas(response, loc, startTime, endTime)
-    saveDataToJSON(df, "rawAPIdata "+ str(i))
+locations = [[49.496548, 8.585716]]
+# dC = dataCollector()
+# for i, loc in enumerate(locations):
+#     response = dC.getHourlyHistoricData(loc, startTime, endTime)
+#     df = dataCollector.createPandas(response, loc, startTime, endTime)
+#     saveDataToJSON(df, "rawAPIdata "+ str(i))
 
 for i, loc in enumerate(locations):
     dataName = "rawAPIdata "+str(i)+".json"
@@ -37,5 +37,6 @@ for i, loc in enumerate(locations):
         saveDataToCSV(predDataKNN, str(i)+str(hours)+'PredKNN')
         truePred = NNR.fullInformationForecast(nHoursPredict)
         saveDataToCSV(truePred, str(i)+str(hours)+'PredTrue')
+        break
         NNR.plot(nHoursPredict)
         NNR.step()
