@@ -13,6 +13,7 @@ class ML:
         return
 
     def calculateLaggedInstance(self, lag, targetFeature='liquid_acc_period'):
+        # lag = autoregressive lag
         """
         for each day (row) and for a given feature (column) add value for that feature N days
         prior
@@ -32,8 +33,8 @@ class ML:
             missingVals = pd.isnull(self.pand[feature])
             self.pand[feature][missingVals] = 0
         # drop nans
-        self.pand.dropna()
-        return
+        self.pand = self.pand.dropna()
+        return self.pand
 
     def deriveNthDayFeature(self, N, feature):
         # total number of rows
@@ -52,6 +53,6 @@ class ML:
         return
 
 
-MLobject = ML('[49, 8]onlyRain.json')
-MLobject.calculateLaggedInstance(3)
-MLobject.getPearsonCorrelation()
+# MLobject = ML('[49, 8]onlyRain.json')
+# MLobject.calculateLaggedInstance(3)
+# MLobject.getPearsonCorrelation()
