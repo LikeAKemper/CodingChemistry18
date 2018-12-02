@@ -20,7 +20,7 @@ class kNN:
         return
 
     def giveLast24HistoricData(self):
-        fileToSave = self.df.iloc[-self.startingDelay:, 0]
+        fileToSave = self.df.iloc[-24:, 0]
         return fileToSave
 
     def step(self):

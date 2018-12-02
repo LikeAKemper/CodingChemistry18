@@ -1,7 +1,7 @@
 from dataCollector import *
 from ML import *
 from kNN import *
-from ARIMA import *
+#from ARIMA import *
 import os
 
 def saveDataToJSON(pandasObject, name):

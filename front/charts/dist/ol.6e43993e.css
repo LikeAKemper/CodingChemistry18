@@ -1,0 +1,100 @@
+#map {
+    margin-top: 40px;
+    width: 100%;
+    margin: auto;
+    text-align: left;
+    background-color: silver;
+}
+
+.input-off {
+    display: none;
+}
+
+.input-on {
+    display: block;
+}
+
+#draw-field {
+    margin-top: 15px;
+}
+
+.draw-field-off {
+    display: none;
+}
+
+
+#reset {
+    position: absolute;
+    bottom: 0;
+    width: 80%;
+    align-items: center
+}
+
+.draw-field-on {
+    display: block;
+}
+
+#rotate-around-localFarmingLand {
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    font-family: Mono, monospac;
+    font-size: 300%;
+    background-color: #9abd97;
+    color: #e6e6e6;
+    font-weight: bold;
+
+}
+
+canvas {
+    background-color: white;
+    size: 50%;
+}
+
+.axis path {
+    fill: none;
+    stroke: #777;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: Lato;
+    font-size: 13px;
+}
+
+#myChart {
+    align-content: center;
+    margin: auto;
+    background-color: white;
+    size: 50%;
+}
+
+.header h1 {
+    margin-bottom: 20px;
+}
+
+#logo {
+    box-align: right;
+}
+
+html {
+    background-color: #9abd97;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+body {
+    background-color: #9abd97;
+}
+
+#chart-header {
+    font-size: 260%;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    font-family: Mono, monospac;
+    color: #e6e6e6;
+    font-weight: bold;
+}

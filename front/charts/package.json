@@ -1,0 +1,16 @@
+{
+  "name": "charts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "chart.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel index.html -p 8080",
+    "build": "parcel build --public-url . index.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chart.js": "^2.7.3"
+  }
+}
