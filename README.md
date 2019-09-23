@@ -1,3 +1,3 @@
 # CodingChemistry18
-(UNCLEANDED)result of the hackathon 2018
+uncleaned result of the hackathon 2018
  
