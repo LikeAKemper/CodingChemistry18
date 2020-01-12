@@ -1,3 +1,3 @@
 # CodingChemistry18
-uncleaned result of the hackathon 2018
+uncleaned result of the BASF hackathon 2018
  
